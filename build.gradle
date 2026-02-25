@@ -1,0 +1,98 @@
+plugins {
+  id 'java'
+  id 'maven-publish'
+  id "com.github.node-gradle.node" version "7.0.2"
+  id "no.item.xp.codegen" version "2.7.0"
+  id 'com.enonic.xp.base' version '3.6.2'
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+dependencies {
+  implementation "com.enonic.xp:script-api:${xpVersion}"
+  testImplementation "com.enonic.xp:testing:${xpVersion}"
+}
+
+repositories {
+  mavenCentral()
+  xp.enonicRepo()
+}
+
+node {
+  download = true
+  version = "22.12.0"
+}
+
+processResources {
+  exclude "**/.gitkeep"
+  exclude "**/*.json"
+  exclude "**/*.ts"
+}
+
+tasks.register("dev", Exec) {
+  if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+    commandLine "cmd", "/c", "gradlew.bat", "deploy", "-t"
+  } else {
+    commandLine "./gradlew", "deploy", "-t"
+  }
+}
+
+tasks.register("npmBuild", NpmTask) {
+  args = [
+    "run",
+    "--silent",
+    "build"
+  ]
+  dependsOn npmInstall
+  environment = [
+    "FORCE_COLOR": "true",
+    "LOG_LEVEL_FROM_GRADLE": gradle.startParameter.logLevel.toString(),
+    "NODE_ENV": project.hasProperty("dev") || project.hasProperty("development") ? "development" : "production"
+  ]
+  inputs.dir "src/main/resources"
+  outputs.dir "build/resources/main"
+  outputs.upToDateWhen { false }
+}
+
+jar.dependsOn npmBuild
+
+compileTestJava.dependsOn npmBuild
+
+tasks.register("npmCheck", NpmTask) {
+  dependsOn npmInstall
+  args = [
+    "run",
+    "check"
+  ]
+  environment = [
+    "FORCE_COLOR": "true",
+  ]
+}
+
+check.dependsOn npmCheck
+
+tasks.withType(Copy).configureEach {
+  includeEmptyDirs = false
+}
+
+publishing {
+  repositories {
+    maven {
+      name = "itemtestRepository"
+      url = "https://repo.itemtest.no/releases"
+      credentials(PasswordCredentials)
+      authentication {
+        basic(BasicAuthentication)
+      }
+    }
+  }
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+      groupId group
+      artifactId projectName
+      version version
+    }
+  }
+}

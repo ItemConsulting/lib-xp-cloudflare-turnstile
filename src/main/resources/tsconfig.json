@@ -1,0 +1,32 @@
+{
+  "include": [
+    "**/*.ts"
+  ],
+
+  "exclude": [
+    "**/*.d.ts",
+  ],
+
+  "compilerOptions": {
+    "strict": true,
+    "rootDirs": [
+      ".",
+      "../../../.xp-codegen"
+    ],
+    "paths": {
+      "/lib/xp/*": [
+        "../../../node_modules/@enonic-types/lib-*"
+      ],
+      "/lib/*": [
+        "../../../node_modules/@item-enonic-types/lib-*",
+        "./lib/*"
+      ],
+      "/*": [
+        "./*",
+        "../../../.xp-codegen/*"
+      ]
+    },
+    "skipLibCheck": true,
+    "types": ["@enonic-types/global"]
+  },
+}
