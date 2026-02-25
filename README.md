@@ -4,8 +4,6 @@ This library simplifies integration with Cloudflare Turnstile from Enonic XP pro
 
 [![](https://repo.itemtest.no/api/badge/latest/releases/no/item/lib-xp-cloudflare-turnstile)](https://repo.itemtest.no/#/releases/no/item/lib-xp-cloudflare-turnstile)
 
-<img src="https://github.com/ItemConsulting/lib-xp-cloudflare-turnstile/raw/main/docs/icon.svg?sanitize=true" width="150">
-
 ## Installation
 
 To install this library you need to add a new dependency to your app's build.gradle file.
@@ -47,6 +45,7 @@ You can add the following changes to your *tsconfig.json* to get TypeScript-supp
 
 ```typescript
 import { getSiteKey, verify, TURNSTILE_CLIENT_JS } from "/lib/cloudflare-turnstile";
+import type { Response } from "@enonic-types/core";
 
 export function get(): Response {
   const turnstileSiteKey = getSiteKey();
