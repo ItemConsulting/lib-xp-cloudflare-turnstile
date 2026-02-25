@@ -1,6 +1,6 @@
 {
   "name": "@item-enonic-types/lib-cloudflare-turnstile",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Type definitions for lib-cloudflare-turnstile",
   "license": "MIT",
   "files": [
