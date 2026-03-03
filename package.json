@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "description": "Type definitions for lib-cloudflare-turnstile",
   "license": "MIT",
+  "types": "dist/index.d.ts",
   "files": [
-    "*.d.ts",
-    "format/*.d.ts",
-    "tsconfig.json"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
@@ -15,8 +16,8 @@
     "@item-enonic-types/lib-http-client": "^3.2.2-patch1",
     "@item-enonic-types/lib-testing": "^7.13.0",
     "@item-enonic-types/nashorn-env": "^0.0.2",
-    "@swc/core": "^1.15.13",
-    "@types/node": "^25.3.0",
+    "@swc/core": "^1.15.18",
+    "@types/node": "^25.3.3",
     "concurrently": "^9.2.1",
     "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.1.8",
@@ -31,9 +32,9 @@
     "build": "node tsup/anyServerFiles.js && npx tsup -d build/resources/main",
     "check": "concurrently -c auto -g --timings npm:check:types npm:lint",
     "check:types": "node tsup/anyServerFiles.js && npx tsc --noEmit -p src/main/resources/tsconfig.json || exit 0",
-    "lint": "eslint --cache \"src/main/resources/lib/cloudflare-turnstile.ts\"",
-    "prepublishOnly": "tsc --project src/main/resources/tsconfig.json --declarationDir build/types --emitDeclarationOnly true --declaration true && cp -r ./build/types/* .",
-    "postpublish": "rm ./*.d.ts && rm -r ./format",
+    "lint": "eslint --cache \"src/main/resources/**/*.ts\"",
+    "prepublishOnly": "tsc -p src/main/resources/tsconfig.json --declaration true --emitDeclarationOnly true --declarationDir dist",
+    "postpublish": "rm -r ./dist",
     "release": "npm run build",
     "versioning": "npx changeset version && npm i --package-lock-only && NEW_VERSION=$(node -p \"require('./package.json').version\") && sed -i \"s/version.*/version = ${NEW_VERSION}/\" gradle.properties"
   }
