@@ -41,6 +41,27 @@ You can add the following changes to your *tsconfig.json* to get TypeScript-supp
 }
 ```
 
+## Configuration
+
+You can configure the API-keys in one of two ways:
+
+ 1. As a mixin on _site.xml_
+    ```xml
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <site xmlns="urn:enonic:xp:model:1.0">
+      <form>
+        <mixin name="cloudflare-turnstile" />
+      </form>
+    </site>
+    ```
+ 2. As a configuration on your applications _*.cfg_ file
+    ```ini
+    # These testing keys will always succeed
+    turnstileSiteKey=1x00000000000000000000AA
+    turnstileSecretKey=1x0000000000000000000000000000000AA
+    ```
+
+
 ### Usage
 
 ```typescript
