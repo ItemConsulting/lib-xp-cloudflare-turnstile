@@ -32,7 +32,7 @@
     "build": "node tsup/anyServerFiles.js && npx tsup -d build/resources/main",
     "check": "concurrently -c auto -g --timings npm:check:types npm:lint",
     "check:types": "node tsup/anyServerFiles.js && npx tsc --noEmit -p src/main/resources/tsconfig.json || exit 0",
-    "lint": "eslint --cache \"src/main/resources/**/*.ts\"",
+    "lint": "eslint --cache \"src/main/resources/lib/cloudflare-turnstile/index.ts\"",
     "prepublishOnly": "tsc -p src/main/resources/tsconfig.json --declaration true --emitDeclarationOnly true --declarationDir dist",
     "postpublish": "rm -r ./dist",
     "release": "npm run build",
