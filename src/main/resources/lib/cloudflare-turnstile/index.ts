@@ -4,6 +4,7 @@ import type { CloudflareTurntile } from "/site/mixins";
 import type { Request } from "@enonic-types/core";
 
 export const TURNSTILE_CLIENT_JS = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+export const FIELD_TURNSTILE_RESPONSE = "cf-turnstile-response";
 const URL_SITE_VERIFY = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
 export type TurnstileResponseSuccess = {
@@ -24,7 +25,7 @@ export type TurnstileResponseFailed = {
 export type TurnstileResponse = TurnstileResponseSuccess | TurnstileResponseFailed;
 
 export function verify(req: Request): TurnstileResponse {
-  const token = first(req.params["cf-turnstile-response"]);
+  const token = first(req.params[FIELD_TURNSTILE_RESPONSE]);
 
   try {
     assertIsDefined(token, "token");
