@@ -1,5 +1,11 @@
 # @item-enonic-types/lib-cloudflare-turnstile
 
+## 0.3.0
+
+### Minor Changes
+
+- ff7ed11: Stop spammig the log if the token is missing
+
 ## 0.2.0
 
 ### Minor Changes
