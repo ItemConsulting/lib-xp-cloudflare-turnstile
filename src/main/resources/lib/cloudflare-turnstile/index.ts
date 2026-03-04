@@ -24,12 +24,23 @@ export type TurnstileResponseFailed = {
 
 export type TurnstileResponse = TurnstileResponseSuccess | TurnstileResponseFailed;
 
+const ERROR_INTERNAL_MISSING_INPUT_RESPONSE: TurnstileResponseFailed = {
+  success: false,
+  "error-codes": ["missing-input-response"],
+};
+const ERROR_INTERNAL_SERVER_ERROR: TurnstileResponseFailed = {
+  success: false,
+  "error-codes": ["internal-error"],
+};
+
 export function verify(req: Request): TurnstileResponse {
   const token = first(req.params[FIELD_TURNSTILE_RESPONSE]);
 
-  try {
-    assertIsDefined(token, "token");
+  if (!token) {
+    return ERROR_INTERNAL_MISSING_INPUT_RESPONSE;
+  }
 
+  try {
     const res = httpRequest({
       url: URL_SITE_VERIFY,
       method: "POST",
@@ -50,10 +61,7 @@ export function verify(req: Request): TurnstileResponse {
     log.error("Cloudflare turnstile verification failed", e);
   }
 
-  return {
-    success: false,
-    "error-codes": ["internal-error"],
-  };
+  return ERROR_INTERNAL_SERVER_ERROR;
 }
 
 /**

@@ -65,7 +65,7 @@ You can configure the API-keys in one of two ways:
 ### Usage
 
 ```typescript
-import { getSiteKey, verify, TURNSTILE_CLIENT_JS } from "/lib/cloudflare-turnstile";
+import { getSiteKey, verify, TURNSTILE_CLIENT_JS, FIELD_TURNSTILE_RESPONSE } from "/lib/cloudflare-turnstile";
 import type { Response } from "@enonic-types/core";
 
 export function get(): Response {
@@ -85,7 +85,7 @@ export function get(): Response {
 }
 
 type FormParams = {
-  "cf-turnstile-response": string | string[];
+  [FIELD_TURNSTILE_RESPONSE]: string | string[];
 };
 
 export function post(req: Request<{ params: FormParams }>): Response {
