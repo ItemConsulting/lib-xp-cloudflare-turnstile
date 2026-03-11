@@ -1,5 +1,11 @@
 # @item-enonic-types/lib-cloudflare-turnstile
 
+## 0.4.0
+
+### Minor Changes
+
+- 6960d16: No change since last release
+
 ## 0.3.0
 
 ### Minor Changes
