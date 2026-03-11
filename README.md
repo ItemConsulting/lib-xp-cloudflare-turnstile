@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-  include "no.item:lib-xp-cloudflare-turnstile:0.0.1"
+  include "no.item:lib-xp-cloudflare-turnstile:0.0.4"
 }
 ```
 
