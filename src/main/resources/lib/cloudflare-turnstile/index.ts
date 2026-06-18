@@ -46,9 +46,11 @@ const ERROR_INTERNAL_SERVER_ERROR: TurnstileResponseFailed = {
  * `internal-error`).
  *
  * @param req - The incoming request containing the Turnstile token and the client's remote address.
+ * @param secretKey - The Turnstile secret key to verify against. When omitted, it is resolved
+ *   via {@link getSecretKey} from the application config or the site's `cloudflare-turnstile` mixin.
  * @returns The verification result. Check the `success` field to determine the outcome.
  */
-export function verify(req: Request): TurnstileResponse {
+export function verify(req: Request, secretKey?: string): TurnstileResponse {
   const token = first(req.params[FIELD_TURNSTILE_RESPONSE]);
 
   if (!token) {
@@ -63,7 +65,7 @@ export function verify(req: Request): TurnstileResponse {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        secret: getSecretKey(),
+        secret: secretKey ?? getSecretKey(),
         response: token,
         remoteip: req.remoteAddress,
       }),
