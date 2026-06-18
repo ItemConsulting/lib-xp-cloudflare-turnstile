@@ -107,14 +107,6 @@ To build the project, run the following command
 enonic project build
 ```
 
-### Deploying locally
-
-To deploy to a local sandbox, run the following command
-
-```sh
-enonic project deploy
-```
-
 ### Deploy to Maven
 
 ```sh
