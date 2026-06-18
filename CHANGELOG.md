@@ -1,5 +1,11 @@
 # @item-enonic-types/lib-cloudflare-turnstile
 
+## 0.5.0
+
+### Minor Changes
+
+- de44c3d: Expose `getSiteKeyOrNull()` to enable workflow where it's optional to use Turnstile (without having to catch an error).`
+
 ## 0.4.0
 
 ### Minor Changes
