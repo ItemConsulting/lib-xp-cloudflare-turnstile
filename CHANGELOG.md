@@ -1,5 +1,11 @@
 # @item-enonic-types/lib-cloudflare-turnstile
 
+## 0.6.0
+
+### Minor Changes
+
+- d1d5a74: Add option to pass `secretKey` into `verify` function
+
 ## 0.5.0
 
 ### Minor Changes
