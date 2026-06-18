@@ -21,7 +21,7 @@ repositories {
 
 node {
   download = true
-  version = "22.12.0"
+  version = "22.22.3"
 }
 
 processResources {

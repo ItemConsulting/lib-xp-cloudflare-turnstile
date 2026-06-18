@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-  include "no.item:lib-xp-cloudflare-turnstile:0.0.4"
+  include "no.item:lib-xp-cloudflare-turnstile:0.5.0"
 }
 ```
 
@@ -103,7 +103,7 @@ export function post(req: Request<{ params: FormParams }>): Response {
 
 To build the project, run the following command
 
-```bash
+```sh
 enonic project build
 ```
 
@@ -111,18 +111,18 @@ enonic project build
 
 To deploy to a local sandbox, run the following command
 
-```bash
+```sh
 enonic project deploy
 ```
 
 ### Deploy to Maven
 
-```bash
+```sh
 ./gradlew publish -P com.enonic.xp.app.production=true
 ```
 
 ### Deploy to npm
 
-```bash
+```sh
 npm publish
 ```
