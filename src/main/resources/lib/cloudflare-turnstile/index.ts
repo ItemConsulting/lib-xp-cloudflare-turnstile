@@ -1,7 +1,7 @@
 import type { Request } from "@enonic-types/core";
+import type { CloudflareTurnstile } from "/cms/form-fragments";
 import { request as httpRequest } from "/lib/http-client";
 import { getSiteConfig } from "/lib/xp/portal";
-import type { CloudflareTurntile } from "/site/mixins";
 
 export const TURNSTILE_CLIENT_JS = "https://challenges.cloudflare.com/turnstile/v0/api.js";
 export const FIELD_TURNSTILE_RESPONSE = "cf-turnstile-response";
@@ -47,7 +47,7 @@ const ERROR_INTERNAL_SERVER_ERROR: TurnstileResponseFailed = {
  *
  * @param req - The incoming request containing the Turnstile token and the client's remote address.
  * @param secretKey - The Turnstile secret key to verify against. When omitted, it is resolved
- *   via {@link getSecretKey} from the application config or the site's `cloudflare-turnstile` mixin.
+ *   via {@link getSecretKey} from the application config or the site's `cloudflare-turnstile` form fragment.
  * @returns The verification result. Check the `success` field to determine the outcome.
  */
 export function verify(req: Request, secretKey?: string): TurnstileResponse {
@@ -86,12 +86,12 @@ export function verify(req: Request, secretKey?: string): TurnstileResponse {
  *
  * The key is resolved from the application config (`turnstileSiteKey`) first,
  * falling back to the `turnstileSiteKey` value of the site's
- * `cloudflare-turnstile` mixin.
+ * `cloudflare-turnstile` form fragment.
  *
  * @returns The configured site key, or `null` when none is configured.
  */
 export function getSiteKeyOrNull(): string | null {
-  return app.config.turnstileSiteKey ?? getSiteConfig<Partial<CloudflareTurntile>>()?.turnstileSiteKey ?? null;
+  return app.config.turnstileSiteKey ?? getSiteConfig<CloudflareTurnstile>()?.turnstileSiteKey ?? null;
 }
 
 /**
@@ -99,7 +99,7 @@ export function getSiteKeyOrNull(): string | null {
  *
  * The key is resolved the same way as {@link getSiteKeyOrNull}: from the
  * application config (`turnstileSiteKey`), falling back to the site's
- * `cloudflare-turnstile` mixin.
+ * `cloudflare-turnstile` form fragment.
  *
  * @returns The configured site key.
  * @throws {Error} If `turnstileSiteKey` is not configured.
@@ -115,14 +115,14 @@ export function getSiteKey(): string {
  *
  * The key is resolved from the application config (`turnstileSecretKey`) first,
  * falling back to the `turnstileSecretKey` value of the site's
- * `cloudflare-turnstile` mixin. It is used as the `secret` when calling
+ * `cloudflare-turnstile` form fragment. It is used as the `secret` when calling
  * Cloudflare's siteverify endpoint.
  *
  * @returns The configured secret key.
  * @throws {Error} If `turnstileSecretKey` is not configured.
  */
 export function getSecretKey(): string {
-  const secretKey = app.config.turnstileSecretKey ?? getSiteConfig<Partial<CloudflareTurntile>>()?.turnstileSecretKey;
+  const secretKey = app.config.turnstileSecretKey ?? getSiteConfig<CloudflareTurnstile>()?.turnstileSecretKey;
   assertIsDefined(secretKey, "secretKey");
   return secretKey;
 }

@@ -1,1 +1,13 @@
+pluginManagement {
+  repositories {
+    gradlePluginPortal()
+    // no.item.xp.codegen 3.0.0 is only published as a snapshot so far
+    maven { url = "https://repo.itemtest.no/snapshots" }
+  }
+}
+
+plugins {
+  id 'com.enonic.xp.settings' version '4.2.0'
+}
+
 rootProject.name = projectName

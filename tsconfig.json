@@ -1,6 +1,7 @@
 {
   "include": [
-    "**/*.ts"
+    "**/*.ts",
+    "**/*.mts"
   ],
   "exclude": [
     "**/*.d.ts",
@@ -14,5 +15,10 @@
     "types": [
       "node"
     ],
+    // tsdown's types reference `exports`-subpath imports and ship .d.ts using
+    // private (#) fields; these let the build config type-check cleanly.
+    "skipLibCheck": true,
+    "module": "preserve",
+    "moduleResolution": "bundler"
   },
 }

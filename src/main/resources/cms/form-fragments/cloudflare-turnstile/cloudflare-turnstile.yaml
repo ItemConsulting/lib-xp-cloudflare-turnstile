@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://www.schemastore.org/enonic-xp-form-fragment-8.0.0.json
+kind: "FormFragment"
+title: "Cloudflare Turnstile"
+form:
+  - type: "FieldSet"
+    label: "Cloudflare Turnstile"
+    items:
+      - type: "TextLine"
+        name: "turnstileSiteKey"
+        label: "Turnstile Site Key"
+        occurrences:
+          min: 0
+          max: 1
+
+      - type: "TextLine"
+        name: "turnstileSecretKey"
+        label: "Turnstile Secret Key"
+        occurrences:
+          min: 0
+          max: 1
