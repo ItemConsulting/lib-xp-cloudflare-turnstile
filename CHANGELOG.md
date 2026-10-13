@@ -1,5 +1,11 @@
 # @item-enonic-types/lib-cloudflare-turnstile
 
+## 1.0.0
+
+### Major Changes
+
+- f2b561a: Support Enonic XP 8, and drop support for XP 7.
+
 ## 0.6.0
 
 ### Minor Changes
