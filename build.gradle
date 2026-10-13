@@ -1,17 +1,16 @@
 plugins {
   id 'java'
   id 'maven-publish'
-  id "com.github.node-gradle.node" version "7.0.2"
-  id "no.item.xp.codegen" version "2.7.0"
-  id 'com.enonic.xp.base' version '3.6.2'
+  id "com.github.node-gradle.node" version "7.1.0"
+  id "no.item.xp.codegen" version "3.0.0-SNAPSHOT"
+  id 'com.enonic.xp.base'
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
-
 dependencies {
-  implementation "com.enonic.xp:script-api:${xpVersion}"
-  testImplementation "com.enonic.xp:testing:${xpVersion}"
+  // Libraries the JavaScript sources require at runtime. Declared as implementation so they
+  // land in the published POM, and apps that include this library pick them up transitively.
+  implementation xplibs.portal
+  implementation "com.enonic.lib:lib-http-client:4.0.1"
 }
 
 repositories {
@@ -20,8 +19,13 @@ repositories {
 }
 
 node {
-  download = true
-  version = "22.22.3"
+  // GitHub Actions sets CI, and has already installed Node with setup-node
+  download = !System.getenv("CI")
+  // Single source of truth for the Node version, shared with .github/workflows and nvm
+  version = file(".nvmrc").text.trim()
+  // In CI the build fails on a package-lock.json that has drifted from package.json,
+  // which a plain `npm install` would silently repair
+  npmInstallCommand = System.getenv("CI") ? "ci" : "install"
 }
 
 processResources {
@@ -44,11 +48,10 @@ tasks.register("npmBuild", NpmTask) {
     "--silent",
     "build"
   ]
-  dependsOn npmInstall
+  dependsOn npmInstall, generateTypeScript
   environment = [
     "FORCE_COLOR": "true",
-    "LOG_LEVEL_FROM_GRADLE": gradle.startParameter.logLevel.toString(),
-    "NODE_ENV": project.hasProperty("dev") || project.hasProperty("development") ? "development" : "production"
+    "LOG_LEVEL_FROM_GRADLE": gradle.startParameter.logLevel.toString()
   ]
   inputs.dir "src/main/resources"
   outputs.dir "build/resources/main"
@@ -60,7 +63,7 @@ jar.dependsOn npmBuild
 compileTestJava.dependsOn npmBuild
 
 tasks.register("npmCheck", NpmTask) {
-  dependsOn npmInstall
+  dependsOn npmInstall, generateTypeScript
   args = [
     "run",
     "check"
@@ -80,7 +83,11 @@ publishing {
   repositories {
     maven {
       name = "itemtestRepository"
-      url = "https://repo.itemtest.no/releases"
+      // Only stable versions reach the releases repository: a changesets prerelease (1.0.0-beta.0 on npm) is versioned
+      // 1.0.0-SNAPSHOT here by .changeset/gradle-version.mjs
+      url = version.endsWith("SNAPSHOT")
+        ? "https://repo.itemtest.no/snapshots"
+        : "https://repo.itemtest.no/releases"
       credentials(PasswordCredentials)
       authentication {
         basic(BasicAuthentication)
@@ -90,9 +97,9 @@ publishing {
   publications {
     mavenJava(MavenPublication) {
       from components.java
-      groupId group
-      artifactId projectName
-      version version
+      groupId = project.group
+      artifactId = projectName
+      version = project.version
     }
   }
 }

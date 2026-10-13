@@ -9,30 +9,35 @@
     "README.md",
     "LICENSE"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ItemConsulting/lib-xp-cloudflare-turnstile.git"
+  },
+  "peerDependencies": {
+    "@enonic-types/core": "^8.0.0"
+  },
   "devDependencies": {
-    "@biomejs/biome": "2.5.0",
-    "@changesets/cli": "^2.31.0",
-    "@enonic-types/global": "^7.16.5",
-    "@enonic-types/lib-portal": "^7.16.5",
-    "@item-enonic-types/lib-http-client": "^3.2.2-patch1",
-    "@item-enonic-types/lib-testing": "^7.13.0",
-    "@item-enonic-types/nashorn-env": "^0.0.2",
-    "@swc/core": "^1.15.41",
-    "@types/node": "^25.9.3",
-    "concurrently": "^10.0.3",
-    "glob": "^13.0.6",
-    "tsup": "^8.5.1",
-    "typescript": "^6.0.3"
+    "@biomejs/biome": "2.5.15",
+    "@changesets/cli": "^3.0.3",
+    "@enonic-types/core": "^8.0.4",
+    "@enonic-types/global": "^8.0.4",
+    "@enonic-types/lib-http-client": "^4.0.1",
+    "@enonic-types/lib-portal": "^8.0.4",
+    "@swc/core": "^1.16.18",
+    "@types/node": "^24.19.2",
+    "concurrently": "^10.0.6",
+    "tsdown": "^0.23.1",
+    "typescript": "^7.0.2"
   },
   "scripts": {
-    "build": "node tsup/anyServerFiles.js && npx tsup -d build/resources/main",
+    "build": "tsdown",
     "check": "concurrently -c auto -g --timings npm:check:types npm:lint",
-    "check:types": "node tsup/anyServerFiles.js && npx tsc --noEmit -p src/main/resources/tsconfig.json || exit 0",
+    "check:types": "tsc --noEmit -p src/main/resources/tsconfig.json",
     "lint": "biome check src/main/resources/lib/cloudflare-turnstile",
     "format": "biome check --write src/main/resources/lib/cloudflare-turnstile",
     "prepublishOnly": "tsc -p src/main/resources/tsconfig.json --declaration true --emitDeclarationOnly true --declarationDir dist",
     "postpublish": "rm -r ./dist",
-    "release": "npm run build",
-    "versioning": "npx changeset version && npm i --package-lock-only && NEW_VERSION=$(node -p \"require('./package.json').version\") && sed -i \"s/version.*/version = ${NEW_VERSION}/\" gradle.properties"
+    "release": "changeset publish",
+    "versioning": "changeset version && npm i --package-lock-only && node .changeset/gradle-version.mjs"
   }
 }

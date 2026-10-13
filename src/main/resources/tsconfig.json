@@ -19,6 +19,7 @@
         "../../../node_modules/@enonic-types/lib-*"
       ],
       "/lib/*": [
+        "../../../node_modules/@enonic-types/lib-*",
         "../../../node_modules/@item-enonic-types/lib-*",
         "./lib/*"
       ],
